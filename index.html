@@ -20,6 +20,16 @@
             border: 1px solid #ccc;
             cursor: pointer;
         }
+        .question {
+            background-color: #f9f9f9;
+            min-width: 150px;
+            height: 50px;
+            line-height: 50px;
+        }
+        .answer {
+            background-color: #e6f7ff;
+            min-width: 100px;
+        }
         #result {
             margin-top: 20px;
             font-weight: bold;
@@ -35,17 +45,19 @@
     <!-- Puzzle Container -->
     <div id="puzzle-container">
         <h2>Solve this puzzle: Match the correct pairs!</h2>
-        <p>Drag the answers from the right to match the questions on the left.</p>
+        <p>Drag the answers on the right to match the questions on the left.</p>
         <div style="display: flex; justify-content: center;">
+            <!-- Questions -->
             <div>
-                <div class="match-item" id="q1">1. Capital of France</div>
-                <div class="match-item" id="q2">2. 5 + 3</div>
-                <div class="match-item" id="q3">3. Color of the sky</div>
+                <div class="match-item question" id="q1">1. Capital of France</div>
+                <div class="match-item question" id="q2">2. 5 + 3</div>
+                <div class="match-item question" id="q3">3. Color of the sky</div>
             </div>
+            <!-- Answers -->
             <div style="margin-left: 50px;">
-                <div class="match-item" draggable="true" id="a1">Blue</div>
-                <div class="match-item" draggable="true" id="a2">Paris</div>
-                <div class="match-item" draggable="true" id="a3">8</div>
+                <div class="match-item answer" draggable="true" id="a1">Blue</div>
+                <div class="match-item answer" draggable="true" id="a2">Paris</div>
+                <div class="match-item answer" draggable="true" id="a3">8</div>
             </div>
         </div>
         <button onclick="checkAnswers()">Submit Answers</button>
@@ -71,21 +83,36 @@
         };
         let userAnswers = {};
 
-        document.querySelectorAll('[draggable]').forEach(item => {
+        // Enable dragging for answers
+        document.querySelectorAll('.answer').forEach(item => {
             item.addEventListener('dragstart', event => {
                 event.dataTransfer.setData('text', event.target.id);
             });
         });
 
-        document.querySelectorAll('.match-item').forEach(item => {
+        // Allow dropping only on questions
+        document.querySelectorAll('.question').forEach(item => {
             item.addEventListener('dragover', event => {
                 event.preventDefault();
             });
             item.addEventListener('drop', event => {
                 event.preventDefault();
                 const draggedId = event.dataTransfer.getData('text');
-                userAnswers[event.target.id] = draggedId;
-                event.target.innerHTML += ` ➡️ ${document.getElementById(draggedId).innerHTML}`;
+                const targetId = event.target.id;
+
+                // Check if an answer has already been matched to this question
+                if (userAnswers[targetId]) {
+                    alert('This question already has an answer!');
+                    return;
+                }
+
+                // Check if the target is a valid question
+                if (targetId.startsWith('q')) {
+                    userAnswers[targetId] = draggedId;
+                    event.target.innerHTML = `${event.target.innerHTML} ➡️ ${document.getElementById(draggedId).innerHTML}`;
+                } else {
+                    alert('You can only drop answers onto questions!');
+                }
             });
         });
 
@@ -101,3 +128,4 @@
     </script>
 </body>
 </html>
+
