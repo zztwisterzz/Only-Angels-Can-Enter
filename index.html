@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Only Angels Can Enter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        img {
+            display: none; /* Initially, images are hidden */
+            margin-top: 20px;
+            max-width: 50%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome Malak, you have been summoned to complete some tasks</h1>
     <p>ARE YOU READY TO BEGIN??</p>
+
+    <!-- Yes/No Buttons -->
+    <button onclick="handleYes()">Yes</button>
+    <button onclick="handleNo()">No</button>
+
+    <!-- Image placeholders -->
+    <img id="yesImage" src="yes.jpg" alt="Yes response">
+    <img id="noImage" src="no.jpg" alt="No response">
+
+    <script>
+        function handleYes() {
+            document.getElementById("yesImage").style.display = "block"; // Show "Yes" image
+            document.getElementById("noImage").style.display = "none";  // Hide "No" image
+        }
+
+        function handleNo() {
+            document.getElementById("noImage").style.display = "block"; // Show "No" image
+            document.getElementById("yesImage").style.display = "none"; // Hide "Yes" image
+        }
+    </script>
 </body>
 </html>
