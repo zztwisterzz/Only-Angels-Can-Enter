@@ -34,6 +34,10 @@
             margin-top: 20px;
             font-weight: bold;
         }
+        #next-round-btn {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -44,14 +48,14 @@
 
     <!-- Puzzle Container -->
     <div id="puzzle-container">
-        <h2>Round 1: Lets Test your Animation knowledge!</h2>
-        <p>drag the correct color of skin to its significant character.</p>
+        <h2>Round 1: Let's Test your Animation Knowledge!</h2>
+        <p>Drag the correct color of skin to its significant character.</p>
         <div style="display: flex; justify-content: center;">
             <!-- Questions -->
             <div>
                 <div class="match-item question" id="q1">1. Mike Wazowski</div>
                 <div class="match-item question" id="q2">2. Big Hero 6</div>
-                <div class="match-item question" id="q3">3. Megamind </div>
+                <div class="match-item question" id="q3">3. Megamind</div>
             </div>
             <!-- Answers -->
             <div style="margin-left: 50px;">
@@ -62,6 +66,7 @@
         </div>
         <button onclick="checkAnswers()">Submit Answers</button>
         <div id="result"></div>
+        <button id="next-round-btn" onclick="advanceToNextRound()">Wanna advance to your next round?</button>
     </div>
 
     <script>
@@ -77,9 +82,9 @@
 
         // Logic for matching pairs
         let matches = {
-            "q1": "a2", // Capital of France -> Paris
-            "q2": "a3", // 5 + 3 -> 8
-            "q3": "a1"  // Color of the sky -> Blue
+            "q1": "a2", // Mike Wazowski -> Green
+            "q2": "a3", // Big Hero 6 -> White
+            "q3": "a1"  // Megamind -> Blue
         };
         let userAnswers = {};
 
@@ -123,7 +128,23 @@
                     correct++;
                 }
             }
-            document.getElementById('result').innerText = `You got ${correct} out of ${Object.keys(matches).length} correct!`;
+
+            const resultContainer = document.getElementById('result');
+            const nextRoundButton = document.getElementById('next-round-btn');
+
+            if (correct === Object.keys(matches).length) {
+                // All correct
+                resultContainer.innerText = "Well done, that was pretty easy huh?";
+                nextRoundButton.style.display = 'inline-block'; // Show the next round button
+            } else {
+                // Not all correct
+                resultContainer.innerText = `You got ${correct} out of ${Object.keys(matches).length} correct. Try again!`;
+                nextRoundButton.style.display = 'none'; // Hide the next round button if answers are incorrect
+            }
+        }
+
+        function advanceToNextRound() {
+            window.open('about:blank', '_blank'); // Opens a blank page
         }
     </script>
 </body>
