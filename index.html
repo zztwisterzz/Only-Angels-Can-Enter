@@ -70,32 +70,27 @@
     </div>
 
     <script>
-        // Show puzzle when "Yes" is clicked
         function handleYes() {
             document.getElementById('puzzle-container').style.display = 'block';
         }
 
-        // Show image when "No" is clicked
         function handleNo() {
             document.body.innerHTML = '<img src="officememe.jpg" alt="No Image">';
         }
 
-        // Logic for matching pairs
         let matches = {
-            "q1": "a2", // Mike Wazowski -> Green
-            "q2": "a3", // Big Hero 6 -> White
-            "q3": "a1"  // Megamind -> Blue
+            "q1": "a2",
+            "q2": "a3",
+            "q3": "a1"
         };
         let userAnswers = {};
 
-        // Enable dragging for answers
         document.querySelectorAll('.answer').forEach(item => {
             item.addEventListener('dragstart', event => {
                 event.dataTransfer.setData('text', event.target.id);
             });
         });
 
-        // Allow dropping only on questions
         document.querySelectorAll('.question').forEach(item => {
             item.addEventListener('dragover', event => {
                 event.preventDefault();
@@ -105,13 +100,11 @@
                 const draggedId = event.dataTransfer.getData('text');
                 const targetId = event.target.id;
 
-                // Check if an answer has already been matched to this question
                 if (userAnswers[targetId]) {
                     alert('This question already has an answer!');
                     return;
                 }
 
-                // Check if the target is a valid question
                 if (targetId.startsWith('q')) {
                     userAnswers[targetId] = draggedId;
                     event.target.innerHTML = `${event.target.innerHTML} ➡️ ${document.getElementById(draggedId).innerHTML}`;
@@ -133,18 +126,16 @@
             const nextRoundButton = document.getElementById('next-round-btn');
 
             if (correct === Object.keys(matches).length) {
-                // All correct
                 resultContainer.innerText = "Well done, that was pretty easy huh?";
                 nextRoundButton.style.display = 'inline-block'; // Show the next round button
             } else {
-                // Not all correct
                 resultContainer.innerText = `You got ${correct} out of ${Object.keys(matches).length} correct. Try again!`;
                 nextRoundButton.style.display = 'none'; // Hide the next round button if answers are incorrect
             }
         }
 
         function advanceToNextRound() {
-            window.open('about:blank', '_blank'); // Opens a blank page
+            window.location.href = "riddles.html"; // Redirect to the riddles page
         }
     </script>
 </body>
