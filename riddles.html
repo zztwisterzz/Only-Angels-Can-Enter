@@ -1,0 +1,39 @@
+<body>
+    <h1>Welcome to the Riddler's Domain</h1>
+    <p>Solve these riddles to prove your worth!</p>
+    <div class="riddle-container">
+        <div class="riddle" id="riddle1">
+            <p>Riddle 1: I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?</p>
+            <input type="text" id="answer1" placeholder="Your answer here">
+        </div>
+        <div class="riddle" id="riddle2">
+            <p>Riddle 2: The more of me you take, the more you leave behind. What am I?</p>
+            <input type="text" id="answer2" placeholder="Your answer here">
+        </div>
+        <div class="riddle" id="riddle3">
+            <p>Riddle 3: I’m always in front of you but can’t be seen. What am I?</p>
+            <input type="text" id="answer3" placeholder="Your answer here">
+        </div>
+        <button onclick="checkRiddles()">Submit Answers</button>
+        <div id="riddle-result"></div>
+    </div>
+    <script>
+        function checkRiddles() {
+            const answers = {
+                answer1: "echo",
+                answer2: "footsteps",
+                answer3: "future"
+            };
+            let score = 0;
+
+            if (document.getElementById('answer1').value.toLowerCase() === answers.answer1) score++;
+            if (document.getElementById('answer2').value.toLowerCase() === answers.answer2) score++;
+            if (document.getElementById('answer3').value.toLowerCase() === answers.answer3) score++;
+
+            const result = document.getElementById('riddle-result');
+            if (score === 3) {
+                result.innerText = "Excellent! You solved them all!";
+            } else {
+                result.innerText = `You got ${score} out of 3 correct. Try again!`;
+            }
+        }
