@@ -1,39 +1,157 @@
-<body>
-    <h1>Welcome to the Riddler's Domain</h1>
-    <p>Solve these riddles to prove your worth!</p>
-    <div class="riddle-container">
-        <div class="riddle" id="riddle1">
-            <p>Riddle 1: I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?</p>
-            <input type="text" id="answer1" placeholder="Your answer here">
-        </div>
-        <div class="riddle" id="riddle2">
-            <p>Riddle 2: The more of me you take, the more you leave behind. What am I?</p>
-            <input type="text" id="answer2" placeholder="Your answer here">
-        </div>
-        <div class="riddle" id="riddle3">
-            <p>Riddle 3: I’m always in front of you but can’t be seen. What am I?</p>
-            <input type="text" id="answer3" placeholder="Your answer here">
-        </div>
-        <button onclick="checkRiddles()">Submit Answers</button>
-        <div id="riddle-result"></div>
-    </div>
-    <script>
-        function checkRiddles() {
-            const answers = {
-                answer1: "echo",
-                answer2: "footsteps",
-                answer3: "future"
-            };
-            let score = 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riddler’s Domain</title>
+    <style>
+        body {
+            background: linear-gradient(black, #1a1a1a);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-            if (document.getElementById('answer1').value.toLowerCase() === answers.answer1) score++;
-            if (document.getElementById('answer2').value.toLowerCase() === answers.answer2) score++;
-            if (document.getElementById('answer3').value.toLowerCase() === answers.answer3) score++;
+        .glitch {
+            font-size: 2em;
+            position: relative;
+            animation: flicker 1.5s infinite;
+            margin-bottom: 20px;
+        }
 
-            const result = document.getElementById('riddle-result');
-            if (score === 3) {
-                result.innerText = "Excellent! You solved them all!";
-            } else {
-                result.innerText = `You got ${score} out of 3 correct. Try again!`;
+        @keyframes flicker {
+            0%, 100% {
+                text-shadow: 0px 0px 4px #00ff00, 0px 0px 8px #00ff00, 0px 0px 12px #00ff00;
+            }
+            50% {
+                text-shadow: 0px 0px 2px #00ff00, 0px 0px 6px #00ff00;
             }
         }
+
+        .terminal-text {
+            display: inline-block;
+            border-right: 2px solid #00ff00;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3s steps(30, end), blink-caret 0.5s step-end infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #00ff00 }
+        }
+
+        .riddle {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('dark-abstract-background.jpg'); /* Add a dark, cryptic image here */
+            background-size: cover;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        input[type="text"] {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        button {
+            background: #00ff00;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #008f00;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    <div class="glitch">Welcome to the Riddler’s Domain</div>
+    <div class="terminal-text">"The game begins when the darkness speaks..."</div>
+
+    <!-- Riddles Section -->
+    <div id="riddles-container">
+        <div class="riddle">
+            <p>I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?</p>
+            <input type="text" id="riddle1" placeholder="Enter your answer">
+        </div>
+        <div class="riddle">
+            <p>The more of me you take, the more you leave behind. What am I?</p>
+            <input type="text" id="riddle2" placeholder="Enter your answer">
+        </div>
+        <div class="riddle">
+            <p>I am always running but never move. I have no legs, but I carry you far. What am I?</p>
+            <input type="text" id="riddle3" placeholder="Enter your answer">
+        </div>
+        <button onclick="checkAnswers()">Submit Answers</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function checkAnswers() {
+            const answers = {
+                riddle1: "echo",
+                riddle2: "footsteps",
+                riddle3: "time"
+            };
+
+            const userAnswers = {
+                riddle1: document.getElementById("riddle1").value.toLowerCase().trim(),
+                riddle2: document.getElementById("riddle2").value.toLowerCase().trim(),
+                riddle3: document.getElementById("riddle3").value.toLowerCase().trim()
+            };
+
+            let correct = 0;
+            for (let key in answers) {
+                if (userAnswers[key] === answers[key]) {
+                    correct++;
+                }
+            }
+
+            const resultContainer = document.getElementById("result");
+            if (correct === 3) {
+                resultContainer.innerHTML = "<p style='color: #00ff00;'>Congratulations! You’ve cracked the riddles and survived the darkness!</p>";
+            } else {
+                resultContainer.innerHTML = `<p style='color: red;'>You got ${correct} out of 3 correct. Try again, or does the darkness consume you?</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
