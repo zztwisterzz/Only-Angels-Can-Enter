@@ -78,22 +78,45 @@
     <div id="warning">You are running out of attempts to seek your answers.</div>
     <div id="background"></div>
 
-    <script>
+<script>
         const riddles = [
             {
-                question: "I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?",
-                answer: "echo"
+                question: "I can be heard but not seen, I can be felt but never touched, I am the essence of being, What am I?",
+                answer: "alive"
             },
             {
-                question: "The more of me you take, the more you leave behind. What am I?",
-                answer: "footsteps"
+                question: "I’m often hidden but always sought, When found, I can change the lot. Sometimes hard and full of strife, But without me, what is life?",
+                answer: "truth"
             },
             {
-                question: "I am always running but never move. I have no legs, but I carry you far. What am I?",
-                answer: "time"
+                question: "In ancient sands, I rise and fall, A timeless land, grand and tall. With pyramids and mummies old, Where am I that history told?",
+                answer: "egypt"
+            },
+            {
+                question: "Though young they start, to grow they must, Learning lessons, gaining trust. With wisdom gained and rules to follow, What do you call them when they’re not hollow?",
+                answer: "adults"
+            },
+            {
+                question: "I can be loud, I can be soft, I can travel far or not at all. With words I bring connection true, What am I, that speaks through you?",
+                answer: "talking"
+            },
+            {
+                question: "I spark the fire, I light the flame, A yearning deep, it calls your name. Though never fully quenched or known, What is it that makes hearts overthrown?",
+                answer: "desire"
+            },
+            {
+                question: "Two souls, once separate, now align, Bound by threads that intertwine. What word describes this perfect bind, Where hearts and minds are intertwined?",
+                answer: "interlinked"
+            },
+            {
+                question: "I’m not quite love, yet more than trust, Together we are, in fate we must. A deep connection that won't break, What is this bond that hearts will make?",
+                answer: "interlinked"
+            },
+            {
+                question: "Two paths once distant now converge, Through fate and choice, we both emerge. What is this state, both deep and true, That makes two one, as we pursue?",
+                answer: "interlinked"
             }
         ];
-
         let currentRiddleIndex = 0;
         let attemptsLeft = 3;
         const riddleContainer = document.getElementById('riddle-container');
