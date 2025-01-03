@@ -3,224 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riddles</title>
+    <title>Interactive Task</title>
     <style>
         body {
-            background: linear-gradient(to bottom, black, #222);
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: Arial, sans-serif;
             text-align: center;
-            overflow: hidden;
         }
-
-        h1 {
-            font-size: 3em;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
-            margin-top: 50px;
-        }
-
-        #riddle-container {
-            margin-top: 50px;
-            font-size: 1.5em;
-            min-height: 100px;
-        }
-
-        #input-area {
+        #puzzle-container {
+            display: none; /* Initially hidden */
             margin-top: 20px;
-            position: relative;
         }
-
-        .blinking-cursor {
+        .match-item {
             display: inline-block;
-            width: 10px;
-            height: 24px;
-            background-color: #00ff00;
-            animation: blink 1s step-start infinite;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
         }
-
-        #warning {
+        .question {
+            background-color: #f9f9f9;
+            min-width: 150px;
+            height: 50px;
+            line-height: 50px;
+        }
+        .answer {
+            background-color: #e6f7ff;
+            min-width: 100px;
+        }
+        #result {
             margin-top: 20px;
-            color: red;
-            font-size: 1.2em;
-            display: none;
+            font-weight: bold;
         }
-
-        #background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+        #next-round-btn {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
         }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .question-mark {
-            position: absolute;
-            color: #00ff00;
-            font-size: 2em;
-            opacity: 0.1;
-            transform: rotate(-15deg);
-        }
-
-        .letter {
-            display: inline-block;
-            opacity: 0;
-            animation: bounce 0.5s forwards;
-        }
-
-        @keyframes bounce {
-            0% {
-                transform: scale(0);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.5);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .input-letter {
-            display: inline-block;
-            opacity: 0;
-            animation: bounce 0.5s forwards;
-        }
-
     </style>
 </head>
 <body>
-    <h1>Riddle Me This...</h1>
-    <div id="riddle-container"></div>
-    <div id="input-area">
-        <span id="input-display"></span>
-        <span class="blinking-cursor"></span>
+    <h1>Welcome Malak, you have been summoned to complete some tasks</h1>
+    <p>ARE YOU READY TO BEGIN??</p>
+    <button onclick="handleYes()">Yes</button>
+    <button onclick="handleNo()">No</button>
+
+    <!-- Puzzle Container -->
+    <div id="puzzle-container">
+        <h2>Round 1: Let's Test your Animation Knowledge!</h2>
+        <p>Drag the correct color of skin to its significant character.</p>
+        <div style="display: flex; justify-content: center;">
+            <!-- Questions -->
+            <div>
+                <div class="match-item question" id="q1">1. Mike Wazowski</div>
+                <div class="match-item question" id="q2">2. Big Hero 6</div>
+                <div class="match-item question" id="q3">3. Megamind</div>
+            </div>
+            <!-- Answers -->
+            <div style="margin-left: 50px;">
+                <div class="match-item answer" draggable="true" id="a1">Blue</div>
+                <div class="match-item answer" draggable="true" id="a2">Green</div>
+                <div class="match-item answer" draggable="true" id="a3">White</div>
+            </div>
+        </div>
+        <button onclick="checkAnswers()">Submit Answers</button>
+        <div id="result"></div>
+        <button id="next-round-btn" onclick="advanceToNextRound()">Wanna advance to your next round?</button>
     </div>
-    <div id="warning">You are running out of attempts to seek your answers.</div>
-    <div id="background"></div>
 
     <script>
-        const riddles = [
-            {
-                question: "I can be heard but not seen, I can be felt but never touched, I am the essence of being, What am I?",
-                answer: "alive"
-            },
-            {
-                question: "I’m often hidden but always sought, When found, I can change the lot. Sometimes hard and full of strife, But without me, what is life?",
-                answer: "truth"
-            },
-            {
-                question: "In ancient sands, I rise and fall, A timeless land, grand and tall. With pyramids and mummies old, Where am I that history told?",
-                answer: "egypt"
-            },
-            {
-                question: "Though young they start, to grow they must, Learning lessons, gaining trust. With wisdom gained and rules to follow, What do you call them when they’re not hollow?",
-                answer: "adults"
-            },
-            {
-                question: "I can be loud, I can be soft, I can travel far or not at all. With words I bring connection true, What am I, that speaks through you?",
-                answer: "talking"
-            },
-            {
-                question: "I spark the fire, I light the flame, A yearning deep, it calls your name. Though never fully quenched or known, What is it that makes hearts overthrown?",
-                answer: "desire"
-            },
-            {
-                question: "Two souls, once separate, now align, Bound by threads that intertwine. What word describes this perfect bind, Where hearts and minds are intertwined?",
-                answer: "interlinked"
-            },
-            {
-                question: "I’m not quite love, yet more than trust, Together we are, in fate we must. A deep connection that won't break, What is this bond that hearts will make?",
-                answer: "interlinked"
-            },
-            {
-                question: "Two paths once distant now converge, Through fate and choice, we both emerge. What is this state, both deep and true, That makes two one, as we pursue?",
-                answer: "interlinked"
-            }
-        ];
+        function handleYes() {
+            document.getElementById('puzzle-container').style.display = 'block';
+        }
 
-        let currentRiddleIndex = 0;
-        let attemptsLeft = 3;
-        const riddleContainer = document.getElementById('riddle-container');
-        const inputDisplay = document.getElementById('input-display');
-        const warning = document.getElementById('warning');
+        function handleNo() {
+            document.body.innerHTML = '<img src="officememe.jpg" alt="No Image">';
+        }
 
-        function showRiddle() {
-            if (currentRiddleIndex < riddles.length) {
-                riddleContainer.innerHTML = '';
-                let question = riddles[currentRiddleIndex].question;
-                let index = 0;
+        let matches = {
+            "q1": "a2",
+            "q2": "a3",
+            "q3": "a1"
+        };
+        let userAnswers = {};
 
-                function typeLetter() {
-                    if (index < question.length) {
-                        let letter = document.createElement('span');
-                        letter.className = 'letter';
-                        letter.textContent = question[index];
-                        riddleContainer.appendChild(letter);
-                        index++;
-                        setTimeout(typeLetter, 100);
-                    }
+        document.querySelectorAll('.answer').forEach(item => {
+            item.addEventListener('dragstart', event => {
+                event.dataTransfer.setData('text', event.target.id);
+            });
+        });
+
+        document.querySelectorAll('.question').forEach(item => {
+            item.addEventListener('dragover', event => {
+                event.preventDefault();
+            });
+            item.addEventListener('drop', event => {
+                event.preventDefault();
+                const draggedId = event.dataTransfer.getData('text');
+                const targetId = event.target.id;
+
+                if (userAnswers[targetId]) {
+                    alert('This question already has an answer!');
+                    return;
                 }
-                typeLetter();
-                inputDisplay.textContent = '';
+
+                if (targetId.startsWith('q')) {
+                    userAnswers[targetId] = draggedId;
+                    event.target.innerHTML = `${event.target.innerHTML} ➡️ ${document.getElementById(draggedId).innerHTML}`;
+                } else {
+                    alert('You can only drop answers onto questions!');
+                }
+            });
+        });
+
+        function checkAnswers() {
+            let correct = 0;
+            for (let question in matches) {
+                if (userAnswers[question] === matches[question]) {
+                    correct++;
+                }
+            }
+
+            const resultContainer = document.getElementById('result');
+            const nextRoundButton = document.getElementById('next-round-btn');
+
+            if (correct === Object.keys(matches).length) {
+                resultContainer.innerText = "Well done, that was pretty easy huh?";
+                nextRoundButton.style.display = 'inline-block'; // Show the next round button
             } else {
-                riddleContainer.textContent = "Congratulations, you've solved all the riddles!";
-                document.getElementById('input-area').style.display = 'none';
+                resultContainer.innerText = `You got ${correct} out of ${Object.keys(matches).length} correct. Try again!`;
+                nextRoundButton.style.display = 'none'; // Hide the next round button if answers are incorrect
             }
         }
 
-        function handleKeyInput(event) {
-            if (event.key === 'Enter') {
-                const userAnswer = inputDisplay.textContent.trim().toLowerCase();
-                if (userAnswer === riddles[currentRiddleIndex].answer) {
-                    currentRiddleIndex++;
-                    attemptsLeft = 3; // Reset attempts for the next riddle
-                    warning.style.display = 'none';
-                    showRiddle();
-                } else if (userAnswer.length > 0) {
-                    attemptsLeft--;
-                    if (attemptsLeft > 0) {
-                        warning.style.display = 'block';
-                    } else {
-                        riddleContainer.textContent = "You have failed to solve the riddles.";
-                        document.getElementById('input-area').style.display = 'none';
-                    }
-                }
-            } else if (event.key === 'Backspace') {
-                inputDisplay.textContent = inputDisplay.textContent.slice(0, -1);
-            } else if (/^[a-zA-Z0-9 ]$/.test(event.key)) {
-                inputDisplay.textContent += event.key;
-                let letter = document.createElement('span');
-                letter.className = 'input-letter';
-                letter.textContent = event.key;
-                inputDisplay.appendChild(letter);
-            }
+        function advanceToNextRound() {
+            window.location.href = "riddles.html"; // Redirect to the riddles page
         }
-
-        function generateBackground() {
-            const background = document.getElementById('background');
-            for (let i = 0; i < 50; i++) {
-                const questionMark = document.createElement('div');
-                questionMark.className = 'question-mark';
-                questionMark.textContent = '?';
-                questionMark.style.top = Math.random() * 100 + '%';
-                questionMark.style.left = Math.random() * 100 + '%';
-                questionMark.style.fontSize = Math.random() * 3 + 'em';
-                questionMark.style.transform = `rotate(${Math.random() * 360}deg)`;
-                questionMark.style.opacity = Math.random() * 0.3 + 0.1;
-                background.appendChild(questionMark);
-            }
-        }
-
-        document.addEventListener('keydown', handleKeyInput);
-        showRiddle();
-        generateBackground();
     </script>
 </body>
 </html>
